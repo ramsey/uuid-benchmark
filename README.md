@@ -13,7 +13,14 @@ Some useful setup (using [phpbrew](https://github.com/phpbrew/phpbrew)):
 ```
 phpbrew install next as php-7.0.0-dev
 phpbrew use php-7.0.0-dev
-pecl install uuid
+wget http://pecl.php.net/get/uuid-1.0.4.tgz && tar zxf uuid-1.0.4.tgz && cd uuid-1.0.4/
+phpize && ./configure && make && make install
+phpbrew config # Add the line "extension=uuid.so" to the config and save
+```
+
+Now get the benchmark scripts and install dependencies with Composer:
+
+```
 git clone https://github.com/ramsey/uuid-benchmark.git
 cd uuid-benchmark/
 composer install
