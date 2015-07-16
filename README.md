@@ -4,7 +4,7 @@ Tip of the hat to [@jaymecd](https://github.com/jaymecd) for creating the
 [initial script and benchmark tests](https://gist.github.com/jaymecd/7dbac8908bacf54b6db6)
 to bring attention to performance drops between ramsey/uuid releases.
 
-Also, refer to https://github.com/ramsey/uuid/issues/56.
+Also, refer to [ramsey/uuid#56](https://github.com/ramsey/uuid/issues/56).
 
 ## Get set up for the benchmarks
 
