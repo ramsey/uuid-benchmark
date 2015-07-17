@@ -34,8 +34,9 @@ $results['ramsey-pecl'] = $watch->stop('ramsey-pecl');
 
 $watch->start('ramsey-nopecl');
 
+\Ramsey\Uuid\Uuid::setFactory(new \Ramsey\Uuid\UuidFactory());
+
 for ($i = 0; $i < ITERATIONS; ++$i) {
-    \Ramsey\Uuid\Uuid::setFactory(new \Ramsey\Uuid\UuidFactory());
     $x = (string) \Ramsey\Uuid\Uuid::uuid4();
 }
 
@@ -43,11 +44,12 @@ $results['ramsey-nopecl'] = $watch->stop('ramsey-nopecl');
 
 $watch->start('ramsey-randomlib');
 
+$uuidFactory = new \Ramsey\Uuid\UuidFactory();
+// Using low-strength generator by default
+$uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Generator\RandomLibAdapter());
+\Ramsey\Uuid\Uuid::setFactory($uuidFactory);
+
 for ($i = 0; $i < ITERATIONS; ++$i) {
-    $uuidFactory = new \Ramsey\Uuid\UuidFactory();
-    // Using low-strength generator by default
-    $uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Generator\RandomLibAdapter());
-    \Ramsey\Uuid\Uuid::setFactory($uuidFactory);
     $x = (string) \Ramsey\Uuid\Uuid::uuid4();
 }
 
@@ -56,10 +58,11 @@ $results['ramsey-randomlib'] = $watch->stop('ramsey-randomlib');
 if (PHP_MAJOR_VERSION >= 7) {
     $watch->start('ramsey-php7');
 
+    $uuidFactory = new \Ramsey\Uuid\UuidFactory();
+    $uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Benchmark\Php7Generator());
+    \Ramsey\Uuid\Uuid::setFactory($uuidFactory);
+
     for ($i = 0; $i < ITERATIONS; ++$i) {
-        $uuidFactory = new \Ramsey\Uuid\UuidFactory();
-        $uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Benchmark\Php7Generator());
-        \Ramsey\Uuid\Uuid::setFactory($uuidFactory);
         $x = (string) \Ramsey\Uuid\Uuid::uuid4();
     }
 
