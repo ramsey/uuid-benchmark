@@ -44,9 +44,14 @@ $results['ramsey-nopecl'] = $watch->stop('ramsey-nopecl');
 
 $watch->start('ramsey-randomlib');
 
+// Use medium-strength generator
+$randomLibFactory = new \RandomLib\Factory();
+$randomLibGenerator = $randomLibFactory->getMediumStrengthGenerator();
+
 $uuidFactory = new \Ramsey\Uuid\UuidFactory();
-// Using low-strength generator by default
-$uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Generator\RandomLibAdapter());
+$uuidFactory->setRandomGenerator(
+    new \Ramsey\Uuid\Generator\RandomLibAdapter($randomLibGenerator)
+);
 \Ramsey\Uuid\Uuid::setFactory($uuidFactory);
 
 for ($i = 0; $i < ITERATIONS; ++$i) {
