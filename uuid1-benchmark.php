@@ -38,10 +38,28 @@ if (class_exists('\Rhumsaa\Uuid\Uuid')) {
 
 
 /**
- * Using Ramsey\Uuid with the default time generator
+ * Using Ramsey\Uuid at 3.0.0-alpha1
  */
 
 if (class_exists('\Ramsey\Uuid\Uuid')) {
+    $factory = \Ramsey\Uuid\Uuid::getFactory();
+    if (!method_exists($factory, 'getTimeGenerator')) {
+        $watch->start('ramsey-3.0.0-alpha1');
+
+        for ($i = 0; $i < ITERATIONS; ++$i) {
+            $x = (string) \Ramsey\Uuid\Uuid::uuid1();
+        }
+
+        $results['ramsey-3.0.0-alpha1'] = $watch->stop('ramsey-3.0.0-alpha1');
+    }
+}
+
+
+/**
+ * Using Ramsey\Uuid with the default time generator
+ */
+
+if (class_exists('\Ramsey\Uuid\Generator\DefaultTimeGenerator')) {
     $watch->start('ramsey-default-generator');
 
     for ($i = 0; $i < ITERATIONS; ++$i) {
@@ -56,7 +74,7 @@ if (class_exists('\Ramsey\Uuid\Uuid')) {
  * Using Ramsey\Uuid with a pecl-uuid time generator
  */
 
-if (class_exists('\Ramsey\Uuid\Uuid')) {
+if (class_exists('\Ramsey\Uuid\Generator\PeclUuidTimeGenerator')) {
     $watch->start('ramsey-pecl-generator');
 
     $uuidFactory = new \Ramsey\Uuid\UuidFactory();
