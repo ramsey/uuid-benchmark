@@ -105,8 +105,25 @@ if (PHP_MAJOR_VERSION >= 7) {
 }
 
 
+/**
+ * Using Ramsey\Uuid with a pecl-uuid random generator
+ */
+
+$watch->start('ramsey-pecl-generator');
+
+$uuidFactory = new \Ramsey\Uuid\UuidFactory();
+$uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Benchmark\PeclRandomGenerator());
+\Ramsey\Uuid\Uuid::setFactory($uuidFactory);
+
+for ($i = 0; $i < ITERATIONS; ++$i) {
+    $x = (string) \Ramsey\Uuid\Uuid::uuid4();
+}
+
+$results['ramsey-pecl-generator'] = $watch->stop('ramsey-pecl-generator');
+
+
 foreach ($results as $name => $result) {
-    printf('% 16s | %.04f sec/%d | %.07f sec/one' . PHP_EOL,
+    printf('% 21s | %.04f sec/%d | %.07f sec/one' . PHP_EOL,
         strtoupper($name),
         $result->getDuration() / 1000,
         ITERATIONS,
