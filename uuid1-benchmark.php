@@ -42,7 +42,7 @@ if (class_exists('\Rhumsaa\Uuid\Uuid')) {
  */
 
 if (class_exists('\Ramsey\Uuid\Uuid')) {
-    $factory = \Ramsey\Uuid\Uuid::getFactory();
+    $factory = new \Ramsey\Uuid\UuidFactory();
     if (!method_exists($factory, 'getTimeGenerator')) {
         $watch->start('ramsey-3.0.0-alpha1');
 
