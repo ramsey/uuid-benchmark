@@ -8,6 +8,11 @@ define('ITERATIONS', 10000);
 
 $results = [];
 
+
+/**
+ * Using pecl-uuid by itself
+ */
+
 $watch->start('pecl');
 
 for ($i = 0; $i < ITERATIONS; ++$i) {
@@ -15,6 +20,11 @@ for ($i = 0; $i < ITERATIONS; ++$i) {
 }
 
 $results['pecl'] = $watch->stop('pecl');
+
+
+/**
+ * Using the older Rhumsaa\Uuid version of the library
+ */
 
 $watch->start('rhumsaa');
 
@@ -24,6 +34,11 @@ for ($i = 0; $i < ITERATIONS; ++$i) {
 
 $results['rhumsaa'] = $watch->stop('rhumsaa');
 
+
+/**
+ * Using Ramsey\Uuid with pecl-uuid
+ */
+
 $watch->start('ramsey-pecl');
 
 for ($i = 0; $i < ITERATIONS; ++$i) {
@@ -31,6 +46,11 @@ for ($i = 0; $i < ITERATIONS; ++$i) {
 }
 
 $results['ramsey-pecl'] = $watch->stop('ramsey-pecl');
+
+
+/**
+ * Using Ramsey\Uuid without pecl-uuid
+ */
 
 $watch->start('ramsey-nopecl');
 
@@ -41,6 +61,11 @@ for ($i = 0; $i < ITERATIONS; ++$i) {
 }
 
 $results['ramsey-nopecl'] = $watch->stop('ramsey-nopecl');
+
+
+/**
+ * Using Ramsey\Uuid with ircmaxell/random-lib
+ */
 
 $watch->start('ramsey-randomlib');
 
@@ -60,6 +85,11 @@ for ($i = 0; $i < ITERATIONS; ++$i) {
 
 $results['ramsey-randomlib'] = $watch->stop('ramsey-randomlib');
 
+
+/**
+ * Using Ramsey\Uuid with PHP 7 random_bytes()
+ */
+
 if (PHP_MAJOR_VERSION >= 7) {
     $watch->start('ramsey-php7');
 
@@ -73,6 +103,7 @@ if (PHP_MAJOR_VERSION >= 7) {
 
     $results['ramsey-php7'] = $watch->stop('ramsey-php7');
 }
+
 
 foreach ($results as $name => $result) {
     printf('% 16s | %.04f sec/%d | %.07f sec/one' . PHP_EOL,
