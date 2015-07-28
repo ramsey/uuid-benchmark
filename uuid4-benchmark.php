@@ -36,57 +36,6 @@ $results['rhumsaa'] = $watch->stop('rhumsaa');
 
 
 /**
- * Using Ramsey\Uuid with pecl-uuid
- */
-
-$watch->start('ramsey-pecl');
-
-for ($i = 0; $i < ITERATIONS; ++$i) {
-    $x = (string) \Ramsey\Uuid\Uuid::uuid4();
-}
-
-$results['ramsey-pecl'] = $watch->stop('ramsey-pecl');
-
-
-/**
- * Using Ramsey\Uuid without pecl-uuid
- */
-
-$watch->start('ramsey-nopecl');
-
-\Ramsey\Uuid\Uuid::setFactory(new \Ramsey\Uuid\UuidFactory());
-
-for ($i = 0; $i < ITERATIONS; ++$i) {
-    $x = (string) \Ramsey\Uuid\Uuid::uuid4();
-}
-
-$results['ramsey-nopecl'] = $watch->stop('ramsey-nopecl');
-
-
-/**
- * Using Ramsey\Uuid with ircmaxell/random-lib
- */
-
-$watch->start('ramsey-randomlib');
-
-// Use medium-strength generator
-$randomLibFactory = new \RandomLib\Factory();
-$randomLibGenerator = $randomLibFactory->getMediumStrengthGenerator();
-
-$uuidFactory = new \Ramsey\Uuid\UuidFactory();
-$uuidFactory->setRandomGenerator(
-    new \Ramsey\Uuid\Generator\RandomLibAdapter($randomLibGenerator)
-);
-\Ramsey\Uuid\Uuid::setFactory($uuidFactory);
-
-for ($i = 0; $i < ITERATIONS; ++$i) {
-    $x = (string) \Ramsey\Uuid\Uuid::uuid4();
-}
-
-$results['ramsey-randomlib'] = $watch->stop('ramsey-randomlib');
-
-
-/**
  * Using Ramsey\Uuid with PHP 7 random_bytes()
  */
 
@@ -94,7 +43,7 @@ if (PHP_MAJOR_VERSION >= 7) {
     $watch->start('ramsey-php7');
 
     $uuidFactory = new \Ramsey\Uuid\UuidFactory();
-    $uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Benchmark\Php7Generator());
+    $uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Generator\RandomBytesGenerator());
     \Ramsey\Uuid\Uuid::setFactory($uuidFactory);
 
     for ($i = 0; $i < ITERATIONS; ++$i) {
@@ -106,20 +55,71 @@ if (PHP_MAJOR_VERSION >= 7) {
 
 
 /**
- * Using Ramsey\Uuid with a pecl-uuid random generator
+ * Using Ramsey\Uuid with OpenSSL
  */
 
-$watch->start('ramsey-pecl-generator');
+$watch->start('ramsey-openssl');
 
 $uuidFactory = new \Ramsey\Uuid\UuidFactory();
-$uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Benchmark\PeclRandomGenerator());
+$uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Generator\OpenSslGenerator());
 \Ramsey\Uuid\Uuid::setFactory($uuidFactory);
 
 for ($i = 0; $i < ITERATIONS; ++$i) {
     $x = (string) \Ramsey\Uuid\Uuid::uuid4();
 }
 
-$results['ramsey-pecl-generator'] = $watch->stop('ramsey-pecl-generator');
+$results['ramsey-openssl'] = $watch->stop('ramsey-openssl');
+
+
+/**
+ * Using Ramsey\Uuid with MtRand
+ */
+
+$watch->start('ramsey-mtrand');
+
+$uuidFactory = new \Ramsey\Uuid\UuidFactory();
+$uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Generator\MtRandGenerator());
+\Ramsey\Uuid\Uuid::setFactory($uuidFactory);
+
+for ($i = 0; $i < ITERATIONS; ++$i) {
+    $x = (string) \Ramsey\Uuid\Uuid::uuid4();
+}
+
+$results['ramsey-mtrand'] = $watch->stop('ramsey-mtrand');
+
+
+/**
+ * Using Ramsey\Uuid with pecl-uuid
+ */
+
+$watch->start('ramsey-pecl');
+
+$uuidFactory = new \Ramsey\Uuid\UuidFactory();
+$uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Generator\PeclUuidRandomGenerator());
+\Ramsey\Uuid\Uuid::setFactory($uuidFactory);
+
+for ($i = 0; $i < ITERATIONS; ++$i) {
+    $x = (string) \Ramsey\Uuid\Uuid::uuid4();
+}
+
+$results['ramsey-pecl'] = $watch->stop('ramsey-pecl');
+
+
+/**
+ * Using Ramsey\Uuid with ircmaxell/random-lib
+ */
+
+$watch->start('ramsey-randomlib');
+
+$uuidFactory = new \Ramsey\Uuid\UuidFactory();
+$uuidFactory->setRandomGenerator(new \Ramsey\Uuid\Generator\RandomLibAdapter());
+\Ramsey\Uuid\Uuid::setFactory($uuidFactory);
+
+for ($i = 0; $i < ITERATIONS; ++$i) {
+    $x = (string) \Ramsey\Uuid\Uuid::uuid4();
+}
+
+$results['ramsey-randomlib'] = $watch->stop('ramsey-randomlib');
 
 
 foreach ($results as $name => $result) {

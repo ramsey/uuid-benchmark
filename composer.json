@@ -2,7 +2,7 @@
     "require": {
         "ext-uuid": "^1.0",
         "rhumsaa/uuid": "^2.8",
-        "ramsey/uuid": "3.0.0-alpha1",
+        "ramsey/uuid": "3.0.0-alpha3",
         "symfony/stopwatch": "^2.7",
         "ircmaxell/random-lib": "^1.1"
     },

@@ -26,67 +26,43 @@ $results['pecl'] = $watch->stop('pecl');
  * Using the older Rhumsaa\Uuid version of the library
  */
 
-if (class_exists('\Rhumsaa\Uuid\Uuid')) {
-    $watch->start('rhumsaa');
+$watch->start('rhumsaa');
 
-    for ($i = 0; $i < ITERATIONS; ++$i) {
-        $x = (string) \Rhumsaa\Uuid\Uuid::uuid1();
-    }
-
-    $results['rhumsaa'] = $watch->stop('rhumsaa');
+for ($i = 0; $i < ITERATIONS; ++$i) {
+    $x = (string) \Rhumsaa\Uuid\Uuid::uuid1();
 }
+
+$results['rhumsaa'] = $watch->stop('rhumsaa');
 
 
 /**
- * Using Ramsey\Uuid at 3.0.0-alpha1
+ * Using Ramsey\Uuid with default time generator
  */
 
-if (class_exists('\Ramsey\Uuid\Uuid')) {
-    $factory = new \Ramsey\Uuid\UuidFactory();
-    if (!method_exists($factory, 'getTimeGenerator')) {
-        $watch->start('ramsey-3.0.0-alpha1');
+$watch->start('ramsey-default');
 
-        for ($i = 0; $i < ITERATIONS; ++$i) {
-            $x = (string) \Ramsey\Uuid\Uuid::uuid1();
-        }
-
-        $results['ramsey-3.0.0-alpha1'] = $watch->stop('ramsey-3.0.0-alpha1');
-    }
+for ($i = 0; $i < ITERATIONS; ++$i) {
+    $x = (string) \Ramsey\Uuid\Uuid::uuid1();
 }
 
-
-/**
- * Using Ramsey\Uuid with the default time generator
- */
-
-if (class_exists('\Ramsey\Uuid\Generator\DefaultTimeGenerator')) {
-    $watch->start('ramsey-default-generator');
-
-    for ($i = 0; $i < ITERATIONS; ++$i) {
-        $x = (string) \Ramsey\Uuid\Uuid::uuid1();
-    }
-
-    $results['ramsey-default-generator'] = $watch->stop('ramsey-default-generator');
-}
+$results['ramsey-default'] = $watch->stop('ramsey-default');
 
 
 /**
  * Using Ramsey\Uuid with a pecl-uuid time generator
  */
 
-if (class_exists('\Ramsey\Uuid\Generator\PeclUuidTimeGenerator')) {
-    $watch->start('ramsey-pecl-generator');
+$watch->start('ramsey-pecl');
 
-    $uuidFactory = new \Ramsey\Uuid\UuidFactory();
-    $uuidFactory->setTimeGenerator(new \Ramsey\Uuid\Generator\PeclUuidTimeGenerator());
-    \Ramsey\Uuid\Uuid::setFactory($uuidFactory);
+$uuidFactory = new \Ramsey\Uuid\UuidFactory();
+$uuidFactory->setTimeGenerator(new \Ramsey\Uuid\Generator\PeclUuidTimeGenerator());
+\Ramsey\Uuid\Uuid::setFactory($uuidFactory);
 
-    for ($i = 0; $i < ITERATIONS; ++$i) {
-        $x = (string) \Ramsey\Uuid\Uuid::uuid1();
-    }
-
-    $results['ramsey-pecl-generator'] = $watch->stop('ramsey-pecl-generator');
+for ($i = 0; $i < ITERATIONS; ++$i) {
+    $x = (string) \Ramsey\Uuid\Uuid::uuid1();
 }
+
+$results['ramsey-pecl'] = $watch->stop('ramsey-pecl');
 
 
 foreach ($results as $name => $result) {
