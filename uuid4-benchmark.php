@@ -26,13 +26,26 @@ $results['pecl'] = $watch->stop('pecl');
  * Using the older Rhumsaa\Uuid version of the library
  */
 
-$watch->start('rhumsaa');
+$watch->start('rhumsaa-openssl');
 
 for ($i = 0; $i < ITERATIONS; ++$i) {
     $x = (string) \Rhumsaa\Uuid\Uuid::uuid4();
 }
 
-$results['rhumsaa'] = $watch->stop('rhumsaa');
+$results['rhumsaa-openssl'] = $watch->stop('rhumsaa-openssl');
+
+/**
+ * Using the older Rhumsaa\Uuid version of the library without OpenSSL
+ */
+$watch->start('rhumsaa-mtrand');
+
+\Rhumsaa\Uuid\Uuid::$forceNoOpensslRandomPseudoBytes = true;
+
+for ($i = 0; $i < ITERATIONS; ++$i) {
+    $x = (string) \Rhumsaa\Uuid\Uuid::uuid4();
+}
+
+$results['rhumsaa-mtrand'] = $watch->stop('rhumsaa-mtrand');
 
 
 /**
